@@ -64,18 +64,23 @@ def shopping_cart():
     #   - The cart is a list in session containing melons added
 
     cart_dict = {}
+    if not session:                                 # if nothing has been added to cart yet
+        melon_info_tuples = []
+        flash('No melons in your cart yet')
+        return render_template('cart.html', melon_info_tuples=melon_info_tuples)
+
     for id in session['cart']:
         cart_dict[id] = cart_dict.setdefault(id, 0) + 1
 
-    list_of_tuples = []
+    melon_info_tuples = []
     for id in cart_dict.keys():
         melon = model.Melon.get_by_id(id)
         name = melon.common_name
         price = melon.price
         num = cart_dict[id]
-        list_of_tuples.append((name, num, price))
+        melon_info_tuples.append((name, num, price))
 
-    return render_template("cart.html", list_of_tuples=list_of_tuples)
+    return render_template("cart.html", melon_info_tuples=melon_info_tuples)
 
 
 @app.route("/add_to_cart/<int:id>")
