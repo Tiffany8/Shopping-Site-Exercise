@@ -110,6 +110,12 @@ def show_login():
 
     return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    """Logout customer and redirect to melons list."""
+    del session['logged_in_customer_email']
+    flash("You have been successfully logged out.")
+    return redirect('/melons')
 
 @app.route("/login", methods=["POST"])
 def process_login():
